@@ -1,0 +1,25 @@
+\section{Implementierung}
+
+\subsection{NodeJS-Server}
+
+\begin{lstlisting}
+// Hello.java
+import javax.swing.JApplet;
+import java.awt.Graphics;
+
+public class Hello extends JApplet {
+    public void paintComponent(Graphics g) {
+        g.drawString("Hello, world!", 65, 95);
+    }    
+}
+\end{lstlisting}
+
+Der NodeJS-Server erfüllt drei Aufgaben: zum einen werden alle Vitalwerte von den Sensoren entgegen genommen und an die eXist-Datenbank weitergeleitet. Dafür steht ein REST-Service zur Verfügung, der die Daten in Form eines XML-Dokuments erwartet und in jedem Fall \textit{Success} zurück gibt. Es wird davon ausgegangen, dass die Sensoren keine Fehlerbehandlung beinhalten, sprich bei einem fehlerhaften Request werden die Daten nicht neu gesendet. Daher ist es auch nicht nötig, die Daten innerhalb des REST-Services zu prüfen, er dient lediglich zur Weiterleitung der Werte. Das Paket \textit{node-rest-client} ermöglicht das Senden eines POST-Requests aus NodeJS heraus. Das ist nötig, um die Daten an die eXist-Datenbank schicken zu können. 
+\\
+\\
+Die zweite Aufgabe besteht darin, alle Clienten, die sich vorher an dem Server angemeldet haben, über Änderungen der Vitalwerte für die jeweilige Person zu informieren. Dafür stellt der Server einen Websocket zur Verfügung, über den die aktuellen Werte an den entsprechenden Clienten gesendet werden. Dies wird über Events gesteuert, die beim Clienten die entsprechenden Programmroutinen auslösen, um die neuen Werte auf der Website anzuzeigen. Beispielsweise wird bei Empfang neuer Vitalwerte auf der Serverseite das Event \textit{receiveVitalWert} mit dem XML-Dokument ausgelöst. Der angesprochene Client besitzt ebenfalls ein Event \textit{receiveVitalWert}, welches das XML-Dokument entgegen nimmt und die Abarbeitung der Programmschritte einleitet. Der Client muss jedoch zunächst dem Server übermitteln, für welche Person er neue Vitalwerte empfangen möchte. Das ist nötig, um gerade bei einer großen Anzahl von neuen Werten den Overhead an unnötig übermittelten Daten gering zu halten.
+\\
+\\
+Als drittes muss der Server dem Client eine Schnittstelle bereitstellen, um den Report von der eXist-Datenbank anfordern zu können. Dies wird ebenfalls über einen Websocket mit entsprechendem Event realisiert. Dieses nimmt die Daten als XML-Dokument entgegen und leitet sie an die entsprechende Funktionalität in der eXist-Datenbank weiter. Hierfür wird wieder das Paket \textit{node-rest-client} verwendet, um einen POST auszuführen. Sobald der Report erstellt wurde, nimmt der Server die Daten entgegen und leitet sie an den anfragenden Client weiter.
+
+\subsection{eXist-Datenbank}

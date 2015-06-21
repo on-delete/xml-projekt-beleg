@@ -2,6 +2,39 @@
 \usetheme{Warsaw}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
+\usepackage{listings}
+\usepackage{color}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
 
 \title{Monitoringsystem einer Ambient Assisted Living-Anwendung mit Hilfe der eXist Datenbank}
 \author{Adam Kucera, Andre Krause, Robert Riedel}
@@ -99,6 +132,108 @@ Ambient Assisted Living (AAL) ist die Vernetzung des Wohnraums an sich und mit e
 
 \begin{frame}
 \frametitle{Kommunikation}
+\end{frame}
+
+\section{Implementierung}
+\begin{frame}[fragile]
+\frametitle{Implementierung}
+\begin{itemize}
+	\item Websocket
+\end{itemize}
+\begin{lstlisting}
+var socketio = require('socket.io');
+
+socket.on("disconnect", function(){
+            console.log("Client mit id: " + socket.id + " disconnected!");
+            hmap.forEach(function (value, key) {
+                if(key==socket.id){
+                    hmap.remove(key);
+                }
+            });
+        });
+        
+receiver.emit("receiveVitalWert", xml);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{itemize}
+	\item REST-Service
+\end{itemize}
+\begin{lstlisting}
+function route(handle, pathname, response, request) {
+    if(typeof handle[pathname] === 'function'){
+        handle[pathname](response, request);
+    } else {
+        console.log("No request handler found for " + pathname);
+        response.writeHead(404, {"Content-Type": "text/plain"});
+        response.write("404 Not found");
+        response.end();
+    }
+}
+
+handle["/postVitalwert"] = vitalWerteHandler.postVitalwert;
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{lstlisting}
+client.post("http://localhost:8080/exist/restxq/postSensorData", args, function(data,response) {
+                var string = data.message;
+            });
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{lstlisting}
+let $table-fo := transform:transform($tableBody,doc("/db/apps/aal-server/test-xsl.xsl"),())
+let $fo := <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+                <fo:layout-master-set>
+                    <fo:simple-page-master master-name="my-page">
+                        <fo:region-body margin="1in"/>
+                    </fo:simple-page-master>
+                </fo:layout-master-set>
+   
+\end{lstlisting}
+\end{frame}   
+                
+\begin{frame}[fragile]
+\begin{lstlisting}                
+                
+                <fo:page-sequence master-reference="my-page">
+                    <fo:flow flow-name="xsl-region-body">
+                        <fo:block>
+                            {$table-fo}
+                        </fo:block>
+                    </fo:flow>
+                </fo:page-sequence>
+          </fo:root>
+let $pdf := xslfo:render($fo, "application/pdf", ())
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item Vorführung
+\end{itemize}
+\end{frame}
+
+\section{Probleme}
+\begin{frame}
+\frametitle{Probleme}
+\begin{itemize}
+	\item XQWebsocketModule nicht mehr für aktuelle Version
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+%\frametitle{A first slide}
+
+\begin{center}
+\Huge Fragen?
+\end{center}
+
 \end{frame}
 
 \end{document}

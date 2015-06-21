@@ -11,7 +11,7 @@
 *.tcp
 *.tps
 *.uxf
-*.nav
 hauptdatei.pdf
 
 /workspace
+*.nav

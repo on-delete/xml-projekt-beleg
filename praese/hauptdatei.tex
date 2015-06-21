@@ -131,11 +131,29 @@ Ambient Assisted Living (AAL) ist die Vernetzung des Wohnraums an sich und mit e
 \end{figure}
 \end{frame}
 
-\begin{frame}
+
+\begin{frame}[fragile]
 \frametitle{Kommunikation}
+\begin{itemize}
+	\item XML für Sensorwerte
+\end{itemize}
+\begin{lstlisting}
+<sensorData>
+    <personId>1</personId>
+    <roomId>1</roomId>
+    <timestamp>
+		         <time>19:42 PM</time><date>2015-05-13</date>
+		         </timestamp>
+    <sensor>
+		         <type>Blutdruck</type>
+		         <value>123</value>
+    </sensor>
+</sensorData>
+\end{lstlisting}
 \end{frame}
 
 \section{Implementierung}
+
 \begin{frame}[fragile]
 \frametitle{Implementierung}
 \begin{itemize}

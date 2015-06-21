@@ -202,10 +202,24 @@ socket.on("receiveVitalWert", function (xml) {
 
 \begin{frame}[fragile]
 \begin{itemize}
-	\item Websocket - Webclient
+	\item  Ton für kritische werte
 \end{itemize}
 \begin{lstlisting}
-
+<audio id="HerzfrequenzCritSound" loop="loop">
+    <source src="sirene-airRaid.mp3" type="audio/mpeg"/>
+    Your browser does not support the audio element.
+</audio>
+\end{lstlisting}
+\begin{lstlisting}
+function activateSound(id) {
+    console.log("play sound of: #" + id + '#');
+    elementToChange = document.getElementById(id);
+    if(playSound){
+    elementToChange.play();
+    }else{
+        deActivateSound(id);
+    }
+}
 \end{lstlisting}
 \end{frame}
 

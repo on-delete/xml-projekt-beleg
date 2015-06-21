@@ -159,6 +159,58 @@ receiver.emit("receiveVitalWert", xml);
 
 \begin{frame}[fragile]
 \begin{itemize}
+	\item Websocket - Webclient
+\end{itemize}
+\begin{lstlisting}
+function getPersonData() {
+    person = document.getElementById("personID");
+    personID = person.value;
+    setTextById("personErrorField","");
+    reportButton = document.getElementById("getReportButton");
+    if(personID==""){
+        reportButton.disabled="disabled";
+        setTextById("personErrorField","personID darf nicht leer sein");
+    } else{
+        reportButton.disabled="";
+        socket.emit("setPersonId", personID);
+        console.log("sent request for personId: #"+personID+"#");    
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{lstlisting}
+socket.on("receiveVitalWert", function (xml) {
+    dom = domify(xml);
+    person = dom.getElementsByTagName("personId")[0].firstChild.nodeValue;
+    setTextById('person', person);
+    room = dom.getElementsByTagName("roomId")[0].firstChild.nodeValue;
+    setTextById('room', room);
+    type = dom.getElementsByTagName("type")[0].firstChild.nodeValue;
+    ...
+    date = dom.getElementsByTagName("date")[0].firstChild.nodeValue;
+    setTextById(type + 'Date', date);
+    if (status == 'normal') {
+        setNormalClass(type);
+    } else {
+        setCriticalClass(type);
+    }
+});
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{itemize}
+	\item Websocket - Webclient
+\end{itemize}
+\begin{lstlisting}
+
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{itemize}
 	\item REST-Service
 \end{itemize}
 \begin{lstlisting}
@@ -185,6 +237,8 @@ client.post("http://localhost:8080/exist/restxq/postSensorData", args, function(
             });
 \end{lstlisting}
 \end{frame}
+
+
 
 \begin{frame}[fragile]
 \begin{lstlisting}

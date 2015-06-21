@@ -1,0 +1,12 @@
+\begin{lstlisting}
+
+                <fo:page-sequence master-reference="my-page">
+                    <fo:flow flow-name="xsl-region-body">
+                        <fo:block>
+                            {$table-fo}
+                        </fo:block>
+                    </fo:flow>
+                </fo:page-sequence>
+          </fo:root>
+let $pdf := xslfo:render($fo, "application/pdf", ())
+\end{lstlisting}

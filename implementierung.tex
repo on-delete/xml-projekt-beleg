@@ -1,25 +1,100 @@
 \section{Implementierung}
 
 \subsection{NodeJS-Server}
+Der Node.JS-Server besteht aus zwei Instanzen: Die eine Instanz ist als ein REST-Service implementiert. Sie stellt eine POST-Ressource zur Verfügung, über die die Daten der Sensoren an das eXist geschickt werden. Hierfür gibt es eine \textit{route}-Funktion, die ein Request entgegennimmt und prüft, welche URL angesprochen wird. 
 
 \begin{lstlisting}
-// Hello.java
-import javax.swing.JApplet;
-import java.awt.Graphics;
-
-public class Hello extends JApplet {
-    public void paintComponent(Graphics g) {
-        g.drawString("Hello, world!", 65, 95);
-    }    
+function route(handle, pathname, response, request) {
+    if(typeof handle[pathname] === 'function'){
+        handle[pathname](response, request);
+    } else {
+        console.log("No request handler found for " + pathname);
+        response.writeHead(404, {"Content-Type": "text/plain"});
+        response.write("404 Not found");
+        response.end();
+    }
 }
 \end{lstlisting}
 
-Der NodeJS-Server erfüllt drei Aufgaben: zum einen werden alle Vitalwerte von den Sensoren entgegen genommen und an die eXist-Datenbank weitergeleitet. Dafür steht ein REST-Service zur Verfügung, der die Daten in Form eines XML-Dokuments erwartet und in jedem Fall \textit{Success} zurück gibt. Es wird davon ausgegangen, dass die Sensoren keine Fehlerbehandlung beinhalten, sprich bei einem fehlerhaften Request werden die Daten nicht neu gesendet. Daher ist es auch nicht nötig, die Daten innerhalb des REST-Services zu prüfen, er dient lediglich zur Weiterleitung der Werte. Das Paket \textit{node-rest-client} ermöglicht das Senden eines POST-Requests aus NodeJS heraus. Das ist nötig, um die Daten an die eXist-Datenbank schicken zu können. 
-\\
-\\
-Die zweite Aufgabe besteht darin, alle Clienten, die sich vorher an dem Server angemeldet haben, über Änderungen der Vitalwerte für die jeweilige Person zu informieren. Dafür stellt der Server einen Websocket zur Verfügung, über den die aktuellen Werte an den entsprechenden Clienten gesendet werden. Dies wird über Events gesteuert, die beim Clienten die entsprechenden Programmroutinen auslösen, um die neuen Werte auf der Website anzuzeigen. Beispielsweise wird bei Empfang neuer Vitalwerte auf der Serverseite das Event \textit{receiveVitalWert} mit dem XML-Dokument ausgelöst. Der angesprochene Client besitzt ebenfalls ein Event \textit{receiveVitalWert}, welches das XML-Dokument entgegen nimmt und die Abarbeitung der Programmschritte einleitet. Der Client muss jedoch zunächst dem Server übermitteln, für welche Person er neue Vitalwerte empfangen möchte. Das ist nötig, um gerade bei einer großen Anzahl von neuen Werten den Overhead an unnötig übermittelten Daten gering zu halten.
-\\
-\\
-Als drittes muss der Server dem Client eine Schnittstelle bereitstellen, um den Report von der eXist-Datenbank anfordern zu können. Dies wird ebenfalls über einen Websocket mit entsprechendem Event realisiert. Dieses nimmt die Daten als XML-Dokument entgegen und leitet sie an die entsprechende Funktionalität in der eXist-Datenbank weiter. Hierfür wird wieder das Paket \textit{node-rest-client} verwendet, um einen POST auszuführen. Sobald der Report erstellt wurde, nimmt der Server die Daten entgegen und leitet sie an den anfragenden Client weiter.
+Node.JS extrahiert den \textit{pathname}, also den Teil der URL, der nach dem Host und der Portnummer folgt, automatisch. Sollte die URL nicht zu einer Funktion zuordbar sein, wird ein 404-Fehler zurückgegeben.
 
-\subsection{eXist-Datenbank}
+\begin{lstlisting}
+handle["/postVitalwert"] = vitalWerteHandler.postVitalwert;
+\end{lstlisting}
+
+Wenn aber die URL wie im obigen Beispiel \textit{postVitalwert} ist, wird die entsprechende Funktion \textit{postVitalwert} ausgeführt. Diese Funktion sendet die empfangenen Daten an eXist weiter. Um REST-Calls in Node.JS durchzuführen, wurde das Package \textit{node-rest-client} zusätzlich installiert. Ein POST kann wie folgt implementiert werden.
+
+\begin{lstlisting}
+client.post("http://localhost:8080/exist/restxq/postSensorData", args, function(data,response) {
+    var string = data.message;
+});
+\end{lstlisting}
+
+Dadurch wird ein POST an die angegebene Adresse mit den spezifischen Daten in \textit{args} ausgeführt. Die Antwort wird in der übergebenen Callback-Funktion verarbeitet. Außerdem  werden die Daten von den Sensoren an die zweite Instanz des Node.JS-Servers weitergeleitet.
+\\
+\\
+Die zweite Instanz ist für die Kommunikation zwischen den Clients und dem Server verantwortlich. Diese wird durch den Einsatz von Websockets realisiert. Das Package \textit{socket.io} ermöglicht das Erzeugen einer Connection sowie das Senden und Empfangen von Events. Sobald sich ein Client über den Socket angemeldet hat, kann auf solche Events reagiert werden.
+
+\begin{lstlisting}
+socket.on("setPersonId", function(id){
+            ...
+});
+\end{lstlisting}
+
+In diesem Beispiel wird beim empfangenen Event \textit{setPersonId} die Callback-Funktion mit der empfangenen ID ausgeführt. Es können aber auch Events an die angemeldeten Clients mittels der Funktion \textit{emit} geschickt werden.
+
+\begin{lstlisting}
+receiver.emit("receiveVitalWert", xml);
+\end{lstlisting}
+
+Die beiden Instanzen wurden jeweils an zwei verschiedene Ports gebunden, um z.B. zu vermeiden, dass ein Websocket-Event an den Router des REST-Services geschickt wird. Deshalb wurde für den REST-Service der Port 8888 und für den Websocket-Service der Port 8887 festgelegt.
+
+\subsection{eXist}
+Um eXist von außerhalb ansprechen zu können, wurde der in eXist implementierte Standard \textit{RESTXQ} verwendet. Dieser ermöglicht mittels Annotationen das bereitstellen von \textit{resource functions}, da sie gewissermaßen Ressourcen über HTTP bereitstellen. Es können also XQuery-Funktionen über solche HTTP-Anfragen ausgeführt und die Ergebnisse zurückgegeben werden. POST-Methoden werden beispielsweise mit der Annotation \textit{\%rest:POST("\{\$body\}")} deklariert. Mit dem \textit{\$body} Element kann außerdem festgelegt werden, dass mit dem POST Daten gesendet werden sollen.
+
+\begin{lstlisting}
+declare
+    %rest:POST("{$body}")
+    %rest:consumes("application/xml")
+    %rest:path("/postSensorData")
+function ex:postSensorData($body){
+    ...
+};
+\end{lstlisting}
+
+Außerdem ist es möglich eine Antwort an den anfragenden Client innerhalb von XQuery zu erstellen. Das Element \textit{$<$rest:response$>$} erzeugt mit dem Kindelement \textit{$<$http:response$>$} eine HTTP Statusmeldung mit optional angehangenen Daten. Im folgenden Beispiel wird nach erfolgreichem Speichern der Vitalwerte ein Statuscode 200 gesendet mit dem kurzen XML-Dokument \textit{$<$message$>$Document updated$<$/message$>$}
+
+\begin{lstlisting}
+<rest:response>
+     <http:response status="200" message="ok">
+     <http:header name="Content-Type" value="application/xml"/>
+     <http:header name="Access-Control-Allow-Origin" value="*"/>
+</http:response>
+</rest:response>,<message>Document updated</message>
+\end{lstlisting}
+
+Für die Erstellung der Reports wurde XSLT\footnote[1]{XSL Transformation} und XSL-FO\footnote[2]{Extensible Stylesheet Language – Formatting Objects} verwendet. 
+
+\begin{lstlisting}
+let $table-fo := transform:transform($tableBody,doc("/db/apps/aal-server/test-xsl.xsl"),())
+let $fo := <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:layout-master-set>
+        <fo:simple-page-master master-name="my-page">
+            <fo:region-body margin="1in"/>
+        </fo:simple-page-master>
+    </fo:layout-master-set>
+    <fo:page-sequence master-reference="my-page">
+        <fo:flow flow-name="xsl-region-body">
+            <fo:block>
+                {$table-fo}
+            </fo:block>
+        </fo:flow>
+    </fo:page-sequence>
+</fo:root>
+let $pdf := xslfo:render($fo, "application/pdf", ())
+\end{lstlisting}
+
+In der ersten Zeile wird das XML-Dokument, welches transformiert werden soll sowie die XSL-Datei, die alle Regeln zur Transformation enthält, mittels der Funktion \textit{transform:transform} umgewandelt. In diesem Fall entsteht eine Tabelle mit allen wichtigen Daten. eXist benutzt als XSLT-Prozessor standardmäßig \textit{Saxon HE}. Danach wird in den Zeilen 2 bis 15 ein XSL-FO-Dokument erstellt, welches Layout-Optionen für die PDF beinhaltet. Außerdem wird die transformierte XML als der Körper der PDF im Element \textit{$<$fo:block$>$} deklariert. In Zeile 16 entsteht durch die Funktion \textit{xslfo:render} das fertige PDF-Dokument. Dies kann nun an den Client als ein Base64 codierter String zurückgegeben und im Browser angezeigt werden. \textit{Apache FOP} ist in eXist der standardmäßige Renderer, der genutzt wird um die XSL-FO-Dokumente zu Rendern. 
+\\
+\\
+Da eXist aus einem NoSQL-DBMS besteht, werden alle Daten in Dokumenten abgespeichert. Dazu enthält die in diesem Projekt erstellte Datenbank für jede Person eine Collection (Siehe Abbildung \ref{collection1} auf S. \pageref{collection1}) mit der entsprechenden personId als Namen, um für die Reports gezielt nur die Dokumente zu durchsuchen, die notwendig sind. Innerhalb der Collections werden für jeden Tag separate XML-Dokumente (Siehe Abbildung \ref{collection2} auf S. \pageref{collection2}) erstellt, die alle Vitalwerte für die jeweilige Person enthalten.

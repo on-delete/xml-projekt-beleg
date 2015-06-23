@@ -1,4 +1,5 @@
 \section{Implementierung}
+Das folgende Kapitel beschreibt beispielhaft die Umsetzung des im vorigen Abschnitt beschriebenen Entwurfs. Dabei wird auf einzelne Programmabschnitte näher eingegangen.
 
 \subsection{NodeJS-Server}
 Der Node.JS-Server besteht aus zwei Instanzen: Die eine Instanz ist als ein REST-Service implementiert. Sie stellt eine POST-Ressource zur Verfügung, über die die Daten der Sensoren an das eXist geschickt werden. Hierfür gibt es eine \textit{route}-Funktion, die ein Request entgegennimmt und prüft, welche URL angesprochen wird. 
@@ -16,7 +17,7 @@ function route(handle, pathname, response, request) {
 }
 \end{lstlisting}
 
-Node.JS extrahiert den \textit{pathname}, also den Teil der URL, der nach dem Host und der Portnummer folgt, automatisch. Sollte die URL nicht zu einer Funktion zuordbar sein, wird ein 404-Fehler zurückgegeben.
+Node.JS extrahiert den \textit{pathname}, also den Teil der URL, der nach dem Host und der Portnummer folgt, automatisch. Sollte die URL nicht zu einer Funktion zuordbar sein, wird ein 404-Fehler zurückgegeben mit dem Hinweis, dass die Ressource nicht gefunden wurde.
 
 \begin{lstlisting}
 handle["/postVitalwert"] = vitalWerteHandler.postVitalwert;

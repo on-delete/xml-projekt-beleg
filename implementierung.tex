@@ -98,3 +98,14 @@ In der ersten Zeile wird das XML-Dokument, welches transformiert werden soll sow
 \\
 \\
 Da eXist aus einem NoSQL-DBMS besteht, werden alle Daten in Dokumenten abgespeichert. Dazu enthält die in diesem Projekt erstellte Datenbank für jede Person eine Collection (Siehe Abbildung \ref{collection1} auf S. \pageref{collection1}) mit der entsprechenden personId als Namen, um für die Reports gezielt nur die Dokumente zu durchsuchen, die notwendig sind. Innerhalb der Collections werden für jeden Tag separate XML-Dokumente (Siehe Abbildung \ref{collection2} auf S. \pageref{collection2}) erstellt, die alle Vitalwerte für die jeweilige Person enthalten.
+\subsection{Datengenerator}
+Am Anfang war es wichtig, die vitale Werte d.H. Atemfrequenz, Herzfrequenz, Körpertemperatur und Blutdruck erzeugen lassen. Für die Darstellung kommt eine HTML Webseite mit Javascript und Jquery Technologien vor.
+\\
+\\
+Um diese Aufgabe zu erreichen, wurde erst einfacher Formular erstellt.
+Dieser besteht aus drei wichtigen Eingabefeldern, sprich Person ID, Room ID und Change room. Dazu gibt es noch ein Start und Stop Knopf für Ein-und Auschaltung des Generators. 
+Nachdem Einschalten werden die Werte für Atemfrequenz und Herzfrequenz jede 5 und für die Körpertemperatur und Blutdruck jede 10 Sekunden generiert. Die Werte werden inzwischen dem normalen Intervall erzeugt. Normaler Intervall enstspricht dem gesunden Menschen.
+\\
+\\
+Um den besseren Verständnis über die ganze Situation zu bekommen, besteht den Nutzern eine Möglichkeit die generierten vital Werte live zu beobachten und auch steuern. Der Nutzer kann die Werte erhöhen oder vermindern. Abhängig von der Werten kann auch die Warnung mit dem akustischen Signal auftauchen. 
+Der zweiten Element der Webseite ist eine Tabelle, die die neu generierten Werte zeigt. Dort sieht man die generierten Werte, jetzige Person ID, Room ID und auch entsprechenden Zeitstempel. Es gibt auch s.g. OK Intervall Spalte, wo man der normalen Intervall sehen und auch mit neuen Werten vergleichen kann.

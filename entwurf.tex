@@ -10,7 +10,7 @@ Die folgenden Technologien wurden im Projekt eingesetzt und sollen für das Vers
 
 \subsubsection{Node.JS}
 \label{subsec:NodeJS}
-Node.JS \cite{nodejswebsite} bringt die Programmiersprache Javascript auf die Server-Ebene. Üblicherweise werden Sprachen wie PHP zur Erstellung von Webservices genutzt, um Anwendungen durch Anfragen eines Clients zu starten. Diese Architektur ist jedoch in solchen Fällen ungeeignet, in denen der Client in Echtzeit über Änderungen informiert werden soll. Node.JS ermöglicht es nun Webservices zu erstellen, die mittels Javascript von Anfragen der Clients unabhängig ausgeführt werden können. Hierzu wird die Anwendung beim Start an einen TCP-Port gebunden und erwartet die Anfragen vom Client. Im folgenden Codebeispiel ist gut zu erkennen, dass mit wenig Aufwand ein \textit{"Hello World"}-Server erstellt werden kann.
+Node.JS \cite{nodejswebsite} bringt die Programmiersprache Javascript auf die Server-Ebene. Üblicherweise werden Sprachen wie PHP zur Erstellung von Webservices genutzt, um Anwendungen durch Anfragen eines Clients zu starten. Diese Architektur ist jedoch in solchen Fällen ungeeignet, in denen der Client in Echtzeit über Änderungen informiert werden soll. Node.JS ermöglicht es nun Webservices zu erstellen, die mittels Javascript von Anfragen der Clients unabhängig ausgeführt werden können. Hierzu wird die Anwendung beim Start an einen TCP-Port gebunden und erwartet die Anfragen vom Client. Im folgenden Codebeispiel \ref{lst:hellonode} ist gut zu erkennen, dass mit wenig Aufwand ein \textit{"Hello World"}-Server erstellt werden kann.
 
 \begin{lstlisting}
 var http = require('http');

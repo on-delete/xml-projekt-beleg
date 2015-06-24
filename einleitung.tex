@@ -14,6 +14,7 @@ Hierfür gibt es bereits seit 2008 diverse Studien, die sich mit der Unterstütz
 \subsection{Problemstellung}
 In dem Projekt, was die folgende Arbeit näher beschreibt, sollte ein solches AAL-System zur Überwachung der vitalen Lebensfunktionen als eine Client-Server-Anwendung mit Hilfe von XML-Technologien umgesetzt werden. Dabei wird angenommen, dass es Sensoren gibt, die in regelmäßigen Abständen Vitalwerte an eine zentrale Einheit schicken. Diese Werte umfassen die Körpertemperatur, den Herzschlag, die Atemfrequenz sowie den Blutdruck. Die Werte werden in einer zentralen Datenbank mittels dem NoSQL-DBMS eXist abgespeichert, um zu jederzeit verschiedene Analysen über die gesammelten Werte erstellen zu können. Außerdem werden die Daten an eine Webapplikation geschickt, mit dieser sich alle Werte für eine bestimmte Person überwachen lassen. Sollte ein Wert eine kritische Grenze überschreiten, wird dem Nutzer eine visuelle sowie akustische Meldung ausgegeben, worauf dieser entsprechende Maßnahmen einleiten kann.
 
+\newpage
 \subsection{Aufgabenverteilung}
 Die Aufgaben im Team wurden folgendermaßen verteilt:
 
@@ -24,12 +25,57 @@ Die Aufgaben im Team wurden folgendermaßen verteilt:
 	\centering
 		\begin{tabu} to 0.9\textwidth { X[1.7]  X[3] X[3]}
 		\hline
-		\textbf{Name} & \textbf{Programmieraufgabe} & \textbf{Belegteil}\\
+		\textbf{Name} & \textbf{Programmierung} & \textbf{Belegteil}\\
 		\hline 
-		Kucera, Adam & Generator der Vitalwerte, Website zur Anzeige der Sensordaten & ...\\
-
-		Krause, Andre & Erstellen des NodeJS-Servers, XQuery-Funktionen in eXist & ...\\
-
-		Riedel, Robert & Client-Website & ...\\
+		Kucera, Adam & \begin{itemize}
+		\itemsep 0pt
+		\item highCriticalValues.js
+		\item index.html
+		\item lowCriticalValues.js
+		\item normalValues.js
+		\item util.js
+\end{itemize}		 & \begin{itemize}
+		\itemsep 0pt
+		\item highCriticalValues.js
+		\item index.html
+		\item lowCriticalValues.js
+		\item normalValues.js
+		\item util.js
+\end{itemize}\\ \hline
+		Krause, Andre & \begin{itemize}
+		\itemsep 0pt
+		\item router.js
+		\item index.js
+		\item server.js
+		\item socketServer.js
+		\item vitalWerteHandler.js
+		\item createReport.xqm
+		\item getPersonId.xqm
+		\item postSensorData.xqm
+		\item test-xsl.xsl
+\end{itemize} & \begin{itemize}
+		\itemsep 0pt
+		\item 1. Einleitung
+		\item 1.1 Problemstellung
+		\item 2.2.1 Node.JS
+		\item 2.2.2. eXist
+		\item 2.3 Systemarchitektur
+		\item 2.4 Kommunikation (mit Robert Riedel)
+		\item 3.1 Node.JS-Server
+		\item 3.2 eXist-Server
+		\item 4.1 Probleme
+		\item A.2. Bedienungsanleitung
+\end{itemize}\\ \hline
+		Riedel, Robert & \begin{itemize}
+		\itemsep 0pt
+		\item clientFuntions.js
+		\item clientPage.xhtml
+		\item clientPageStyle.css
+\end{itemize} & \begin{itemize}
+		\itemsep 0pt
+		\item clientFuntions.js
+		\item clientPage.xhtml
+		\item clientPageStyle.css
+\end{itemize}\\
 	\end{tabu}
 \end{table}

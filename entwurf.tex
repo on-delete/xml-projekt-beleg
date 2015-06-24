@@ -46,6 +46,63 @@ eXist \cite{existwebsite} ist eine in der Sprache Java entwickelte Anwendung, di
 \\
 In der stetigen Entwicklung von eXist kam auch eine grafische Oberfläche hinzu, mit der z.B. Code direkt über eine integrierte IDE erstellt und verändert werden kann. Eine Erweiterung des Funktionsumfangs ist durch den Paketmanager leicht möglich. eXist befindet sich weiterhin in der Entwicklung und manche Funktionen sind noch nicht fertig implementiert oder haben noch Fehler. Es ist jedoch in dem jetzigen Stand sehr gut nutzbar.
 
+\subsubsection{XSLT}
+\label{subsec:XSLT}
+XSL ist die Abkürzung für EXtensible Stylesheet Language und gleichzeitig auch eine Stylesheet-Sprache für XML-Dokumente. Auf der anderen Seite steht XSLT \cite{xsltwebsite} für XSL Transformations. XSLT wird verwendet um einen XML Dokument in einem anderen XML Dokument oder auch z.B. HTML, PDF oder RTF Dokument umzuwandeln.
+Mit XSLT lassen sich die Elemente und Attribute hinzufügen oder löschen von dem Ausgabedatei. Es besteht auch die Möglichkeit die Elemente zu sortieren oder umordnen. Man kann überlegen, welche Elemente sollen versteckt oder angeschaut werden.
+\\
+Um die korrekte XSL Deklaration zu erreichen, muss zuerst der Root Element definiert werden:  
+\begin{lstlisting}
+<xsl:stylesheet version="1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+\end{lstlisting}
+Als Beispiel wird XML Datei genommen z.B.
+\\
+\\
+\\
+\begin{lstlisting}
+<message>
+<to>Zuzana</to>
+<heading>Hello</heading>
+<body>How are you today?</body>
+</message>
+\end{lstlisting}
+
+Im nächsten Abschnitt muss definiert werden, wie wird die XML Datei nach dem Formatierung aussehen. Die Datei muss als xsl Datei gespeichert werden. Die Ausgabedatei soll in einer HTML Tabelle mit einem blauen Hintergrund umgewandelt werden.
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsl:stylesheet version="1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+<xsl:template match="/">
+<html>
+<body>
+<message>
+<table border="1">
+<tr bgcolor="0066CC">
+<td><heading>Hello</heading></td>
+<td><to>Zuzana</to></td>
+<td><body>How are you today?</body></td>
+</tr> 
+</table>
+</message> 
+</body>
+</html> 
+</xsl:template>
+</xsl:stylesheet>  
+\end{lstlisting}
+Als Nächstes wird in die XML Datei s.g. XSL style sheet reference hinzugefügt. Damit kommt es zur Verknüpfung von XML Datei und XSL Datei. Das formatierte Ergebnis ist unten zu sehen:
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.7]{images/xslt.jpg} 
+		\caption{XSLT Datei}
+		\label{fig:XSLTDatei}
+	\end{center}
+\end{figure}
+
+
 \subsection{Systemarchitketur}
 \label{subsec:Systemarchitketur}
 Bei der Systemarchitektur fiel die Wahl auf eine Client-Server Anwendung. Aufgrund der Anforderung, ein Monitoring-System zu erstellen, sprich das der Nutzer über eine grafische Schnittstelle bestimmte Werte angezeigt bekommen lassen möchte, musste ein Client erstellt werden. Weiterhin war gefordert, dass Sensoren von verschiedenen Haushalten aus Daten an das Monitoring-System schicken und diese auch gespeichert werden. Daher musste es eine Möglichkeit geben, die Daten von verschiedenen Quellen in einer zentralen Einheit verwalten zu können. Hierfür wurde ein Server mit integrierter Datenbank ausgewählt. Der erste Entwurf für die Systemarchitektur sah wie folgt aus:

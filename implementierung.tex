@@ -1,4 +1,5 @@
 \section{Implementierung}
+Das folgende Kapitel beschreibt beispielhaft die Umsetzung des im vorigen Abschnitt beschriebenen Entwurfs. Dabei wird auf einzelne Programmabschnitte näher eingegangen.
 
 \subsection{NodeJS-Server}
 Der Node.JS-Server besteht aus zwei Instanzen: Die eine Instanz ist als ein REST-Service implementiert. Sie stellt eine POST-Ressource zur Verfügung, über die die Daten der Sensoren an das eXist geschickt werden. Hierfür gibt es eine \textit{route}-Funktion, die ein Request entgegennimmt und prüft, welche URL angesprochen wird. 
@@ -16,7 +17,7 @@ function route(handle, pathname, response, request) {
 }
 \end{lstlisting}
 
-Node.JS extrahiert den \textit{pathname}, also den Teil der URL, der nach dem Host und der Portnummer folgt, automatisch. Sollte die URL nicht zu einer Funktion zuordbar sein, wird ein 404-Fehler zurückgegeben.
+Node.JS extrahiert den \textit{pathname}, also den Teil der URL, der nach dem Host und der Portnummer folgt, automatisch. Sollte die URL nicht zu einer Funktion zuordbar sein, wird ein 404-Fehler zurückgegeben mit dem Hinweis, dass die Ressource nicht gefunden wurde.
 
 \begin{lstlisting}
 handle["/postVitalwert"] = vitalWerteHandler.postVitalwert;
@@ -50,7 +51,7 @@ receiver.emit("receiveVitalWert", xml);
 Die beiden Instanzen wurden jeweils an zwei verschiedene Ports gebunden, um z.B. zu vermeiden, dass ein Websocket-Event an den Router des REST-Services geschickt wird. Deshalb wurde für den REST-Service der Port 8888 und für den Websocket-Service der Port 8887 festgelegt.
 
 \subsection{eXist}
-Um eXist von außerhalb ansprechen zu können, wurde der in eXist implementierte Standard \textit{RESTXQ} verwendet. Dieser ermöglicht mittels Annotationen das bereitstellen von \textit{resource functions}, da sie gewissermaßen Ressourcen über HTTP bereitstellen. Es können also XQuery-Funktionen über solche HTTP-Anfragen ausgeführt und die Ergebnisse zurückgegeben werden. POST-Methoden werden beispielsweise mit der Annotation \textit{\%rest:POST("\{\$body\}")} deklariert. Mit dem \textit{\$body} Element kann außerdem festgelegt werden, dass mit dem POST Daten gesendet werden sollen.
+Um eXist von außerhalb ansprechen zu können, wurde der in eXist implementierte Standard \textit{RESTXQ} verwendet. Dieser ermöglicht mittels Annotationen das Bereitstellen von \textit{resource functions}, also Ressourcen, die über HTTP verfügbar sind. Es können XQuery-Funktionen über solche HTTP-Anfragen ausgeführt und die Ergebnisse zurückgegeben werden. POST-Methoden werden beispielsweise mit der Annotation \textit{\%rest:POST("\{\$body\}")} deklariert. Mit dem \textit{\$body} Element kann außerdem festgelegt werden, dass mit dem POST Daten gesendet werden sollen.
 
 \begin{lstlisting}
 declare
@@ -62,7 +63,7 @@ function ex:postSensorData($body){
 };
 \end{lstlisting}
 
-Außerdem ist es möglich eine Antwort an den anfragenden Client innerhalb von XQuery zu erstellen. Das Element \textit{$<$rest:response$>$} erzeugt mit dem Kindelement \textit{$<$http:response$>$} eine HTTP Statusmeldung mit optional angehangenen Daten. Im folgenden Beispiel wird nach erfolgreichem Speichern der Vitalwerte ein Statuscode 200 gesendet mit dem kurzen XML-Dokument \textit{$<$message$>$Document updated$<$/message$>$}
+Außerdem ist es möglich, eine Antwort an den anfragenden Client innerhalb von XQuery zu erstellen. Das Element \textit{$<$rest:response$>$} erzeugt mit dem Kindelement \textit{$<$http:response$>$} eine HTTP Statusmeldung mit optional angehangenen Daten. Im folgenden Beispiel wird nach erfolgreichem Speichern der Vitalwerte ein Statuscode 200 gesendet mit dem kurzen XML-Dokument \textit{$<$message$>$Document updated$<$/message$>$}
 
 \begin{lstlisting}
 <rest:response>
@@ -94,7 +95,7 @@ let $fo := <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
 let $pdf := xslfo:render($fo, "application/pdf", ())
 \end{lstlisting}
 
-In der ersten Zeile wird das XML-Dokument, welches transformiert werden soll sowie die XSL-Datei, die alle Regeln zur Transformation enthält, mittels der Funktion \textit{transform:transform} umgewandelt. In diesem Fall entsteht eine Tabelle mit allen wichtigen Daten. eXist benutzt als XSLT-Prozessor standardmäßig \textit{Saxon HE}. Danach wird in den Zeilen 2 bis 15 ein XSL-FO-Dokument erstellt, welches Layout-Optionen für die PDF beinhaltet. Außerdem wird die transformierte XML als der Körper der PDF im Element \textit{$<$fo:block$>$} deklariert. In Zeile 16 entsteht durch die Funktion \textit{xslfo:render} das fertige PDF-Dokument. Dies kann nun an den Client als ein Base64 codierter String zurückgegeben und im Browser angezeigt werden. \textit{Apache FOP} ist in eXist der standardmäßige Renderer, der genutzt wird um die XSL-FO-Dokumente zu Rendern. 
+In der ersten Zeile wird das XML-Dokument, welches transformiert werden soll sowie die XSL-Datei, die alle Regeln zur Transformation enthält, mittels der Funktion \textit{transform:transform} umgewandelt. In diesem Fall entsteht eine Tabelle mit allen wichtigen Daten. eXist benutzt als XSLT-Prozessor standardmäßig \textit{Saxon HE}. Danach wird in den Zeilen 2 bis 15 ein XSL-FO-Dokument erstellt, welches Layout-Optionen für die PDF beinhaltet. Außerdem wird die transformierte XML als der Körper der PDF im Element \textit{$<$fo:block$>$} deklariert. In Zeile 16 entsteht durch die Funktion \textit{xslfo:render} das fertige PDF-Dokument. Dies kann nun an den Client als ein Base64 codierter String zurückgegeben und im Browser angezeigt werden. \textit{Apache FOP} ist in eXist der standardmäßige Renderer, der genutzt wird um die XSL-FO-Dokumente zu rendern. 
 \\
 \\
 Da eXist aus einem NoSQL-DBMS besteht, werden alle Daten in Dokumenten abgespeichert. Dazu enthält die in diesem Projekt erstellte Datenbank für jede Person eine Collection (Siehe Abbildung \ref{collection1} auf S. \pageref{collection1}) mit der entsprechenden personId als Namen, um für die Reports gezielt nur die Dokumente zu durchsuchen, die notwendig sind. Innerhalb der Collections werden für jeden Tag separate XML-Dokumente (Siehe Abbildung \ref{collection2} auf S. \pageref{collection2}) erstellt, die alle Vitalwerte für die jeweilige Person enthalten.

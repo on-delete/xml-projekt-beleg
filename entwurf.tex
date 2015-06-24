@@ -75,7 +75,7 @@ Der eXist-Server bietet zur Kommunikation einen Standard, mit dem sich mittels X
 \end{center}
 \end{figure}
 
-Von den Clients aus können sowohl die Reports, als auch die Überprüfung der gewünschten \textit{personId} angefordert werden. Der Node.JS-Server leitet diese Anfragen an eXist weiter und gibt die Antworten an die Clients zurück. Diese Anfragen hätten auch über einen REST-Service erstellt werden können, man entschied sich aber dafür, die Kommunikationsarten auf Clientseite nicht zu vermischen. Außerdem erhält der Client über die offene Websocket-Verbindung jeden neuen Wert, der von den Sensoren geschickt wurde.  
+Von den Clients aus können sowohl die Reports, als auch die Überprüfung der gewünschten \textit{personId} angefordert werden. Der Node.JS-Server leitet diese Anfragen an eXist weiter und gibt die Antworten an die Clients zurück. Diese Anfragen hätten auch über einen REST-Service erstellt werden können, man entschied sich aber dafür, die Kommunikationsarten auf Clientseite nicht zu vermischen. Außerdem erhält der Client über die offene Websocket-Verbindung jeden neuen Wert, der von den Sensoren geschickt wurde.  \\ \\
 
 \begin{figure}[h]
 \begin{center}
@@ -83,3 +83,24 @@ Von den Clients aus können sowohl die Reports, als auch die Überprüfung der g
 \caption{Kommunikation zwischen Node.JS-Server und Client}
 \end{center}
 \end{figure}
+
+
+
+Zur Übermittlung der Daten von den Sensoren zum Server wurde eine XML-Struktur verwendet, welche in Abbildung~\ref{lst:sensorXml} zu sehen ist.
+Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zugeordnet wird. 
+
+
+\begin{lstlisting}[caption={SensorXML},label=lst:sensorXml]
+<sensorData>
+   <personId>Andre</personId>
+   <roomId>Wohnzimmer</roomId>
+   <timestamp>
+      <time>15:33:58 PM</time>
+      <date>2015-06-24</date>
+   </timestamp>
+   <sensor>
+      <type>Herzschlag</type>
+      <value>120</value>
+   </sensor>
+</sensorData>
+\end{lstlisting}

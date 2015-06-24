@@ -87,7 +87,7 @@ Von den Clients aus können sowohl die Reports, als auch die Überprüfung der g
 
 
 Zur Übermittlung der Daten von den Sensoren zum Server wurde eine XML-Struktur verwendet, welche in Abbildung~\ref{lst:sensorXml} zu sehen ist.
-Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zugeordnet wird. 
+Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zugeordnet wird. Die \texttt{roomId} symbolisiert den Aufenthaltsort der Person, wobei der Wert auch eine Abstrakte Id sein kann und keine physische Lokalität. Der \texttt{timestamp} beinhaltet die Uhrzeit und das Datum der Erfassung des Datensatzes. Das gewählte Format richtet sich dabei nach der Speicherung im eXist um die Verarbeitung dort zu erleichtern. Der \texttt{sensor} Tag beinhaltet den Typ (\texttt{type}) des Sensors und seinen Wert(\texttt{value}). Durch die separate Angabe des Typs als Textwert in der XML ist es leicht möglich diese XML-Struktur für weitere Sensortypen zu verwenden. Ebenso kann der Wert sehr allgemein geschickt werden, z.B. auch als String mit physikalischer Einheit. Der \texttt{status} kann genutzt werden um direkt zu übermitteln, ob ein Wert in einem kritischen Bereich liegt. Dadurch ist es nicht nötig, dass der Empfänger Kenntnis von den Grenzwerten hat.
 
 
 \begin{lstlisting}[caption={SensorXML},label=lst:sensorXml]
@@ -101,6 +101,7 @@ Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zuge
    <sensor>
       <type>Herzschlag</type>
       <value>120</value>
+      <status>normal</status>
    </sensor>
 </sensorData>
 \end{lstlisting}

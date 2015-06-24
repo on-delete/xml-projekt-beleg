@@ -1,7 +1,9 @@
 \section{Fazit}
 \label{sec:Fazit}
-\subsection{Funktionalität der Anwendung}
-\label{subsec:FunktionalitaetDerAnwendung}
+Im Rahmen der vorhandenen Zeit wurden alle beschrieben Use Cases umgesetzt. Es können Sensorwerte empfangen, gespeichert und angezeigt werden. Die optische wie auch akustische Darstellung von kritischen Werten ist umgesetzt. Einfache Zusammenstellungen von vergangenen Werten sind möglich.\\
+Die Aufgabe ist somit realisiert. Im Folgenden werden zum einen die Probleme, welche bei der Bearbeitung auftraten, kurz erläutert und zum anderen noch ein Ausblick gegeben, wie die Applikation verbessert und erweitert werden könnte.
+
+
 \subsection{Probleme}
 \label{subsec:Probleme}
 Während der Bearbeitung des Projektes kam es zu diversen Problemen, die sich aber hauptsächlich auf den Funktionsumfang und den Implementierungsstand des sich noch in der Entwicklung befindenden eXist konzentrieren. Um Websockets innerhalb von eXist nutzen zu können, war zunächst angedacht, das Package XQWebsocketModule\footnote[1]{https://github.com/wstarcev/XQWebsocketModule} zu verwenden, da dies eine Implementierung der Sockets als ein Javaprogramm und die Verwendung innerhalb von XQuery versprach. Jedoch konnte für das Package keine gültige Archivdatei erstellt werden, welche von eXist gelesen und importiert werden kann. Ein möglicher Grund dafür könnte sein, dass dieses Modul nicht für die aktuelle Version 2.2 entwickelt wurde. Laut Github, wo das Projekt gehostet wurde, gab es seit rund zwei Jahren keine größeren Änderungen mehr. Deswegen wurde letztendlich entschieden, das Modul nicht zu verwenden, sondern die Kommunikation per Websockets auf einen Node.JS-Server auszulagern.

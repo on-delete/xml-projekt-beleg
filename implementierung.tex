@@ -132,9 +132,9 @@ Zum Erläuterung des Generatorhintegrundes wurde eine Funktion generateBodyTemp 
 var getNumberFromInterval = Math.random() * (max - min) + min;
 \end{lstlisting}
 
-Dazu wurde die Methode Math.random benutzt, die die Nummer zwischen 0 und 1 liefert. Danach wird die Nummer mal 1.5 multipliziert und dazu noch 35.8 addiert. Mit dem parseFloat Methode nimmt man den String und liefert eine Fließkommazahl zurück.  Die Methode toFixed konvertiert die Nummer in den String mit 2 Stellen nach dem Dezimalkomma. Die neue Nummer wird in den Variable x gespeichert. In der vierten Zeile wird den neu generierten Wert in der HTML Tabelle mittels getElementById Methode gezeigt.
+Dazu wurde die Methode Math.random benutzt, die eine Nummer zwischen 0 und 1 liefert. Danach wird die Nummer mit multipliziert 1.5 und dazu noch 35.8 addiert. Mit der parseFloat Methode nimmt man den String und liefert eine Fließkommazahl zurück.  Die Methode toFixed konvertiert die Nummer in den String mit 2 Stellen nach dem Dezimalkomma. Die neue Nummer wird in die Variable x gespeichert. In der vierten Zeile wird den neu generierten Wert in der HTML Tabelle mittels getElementById Methode gezeigt.
 
-In den Zeilen 6 und 7 werden die von dem User eingegebene Werte in den Variablen gespeichert. Die Zeilen Nr. 8 und 9 sind für die Herstellung des Zeitstempels zuständig. Dazu sind 2 Funktionen vorhanden und die Werte werden auch in den Variablen gespeichert. Die Zeile Nr. 10 beinhaltet den String Körpertemperatur. In den 11 Zeile wird den xmlString Funktion mit den 6 Parameter benutzt. Diese Methode erhaltet die Parameter und speichert die in die Variable string.
+In den Zeilen 6 und 7 werden die von dem User eingegebene Werte in den Variablen gespeichert. Die Zeilen Nr. 8 und 9 sind für die Herstellung des Zeitstempels zuständig. Dazu sind 2 Funktionen vorhanden und die Werte werden auch in den Variablen gespeichert. Die Zeile Nr. 10 beinhaltet den String Körpertemperatur. In der 11. Zeile wird die Funktion xmlString mit dem Parameter 6 benutzt. Diese Methode erhält die Parameter und speichert sie in die Variable string.
 
 In der letzten Zeile wird die Funktion ajax mit dem Parameter string aufgerufen.
 \\
@@ -156,5 +156,5 @@ console.log(errorThrown + ", " + jqXHR);
 }
 \end{lstlisting}
 
-Die oben gennante Funktion ajax dient zum Übertragung der Daten zum Server. In der dritten Zeile spezifiert man zu welcher Adresse sich die ajax verbindet. Unsere Variable string wird via POST Methode zu den URL gesendet. ProcessData ist auf false gesetzt, weil man den DOMDocument senden möchte. CrossDomain ist auf true gesetzt um die crossDomain Anforderungen verwenden zu können. Wenn die Daten erfolgreich zum Server gesendet werden, taucht die console mit dem Wert Success auf. Wenn aus irgendwelchem Grund die Übertragung nicht ausführen werden kann, liefert die FUnktion einen Error zurück.   
+Die oben genannte Funktion ajax dient zum Übertragung der Daten zum Server. In der dritten Zeile spezifiziert man, zu welcher Adresse sich ajax verbindet. Die Variable string wird via POST Methode zu der URL gesendet. ProcessData ist auf false gesetzt, weil man das DOMDocument senden möchte. CrossDomain ist auf true gesetzt um die crossDomain Anforderungen verwenden zu können. Wenn die Daten erfolgreich zum Server gesendet werden, taucht die console mit dem Wert Success auf. Wenn aus irgendwelchen Gründen die Übertragung nicht ausgeführt werden kann, liefert die Funktion einen Error zurück.   
      

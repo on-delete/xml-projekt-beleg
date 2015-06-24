@@ -12,6 +12,9 @@ Im folgenden Kapitel wird der Entwurf der Anwendung näher beschrieben. Neben de
 \end{center}
 \end{figure}
 
+Aus der Aufgabenstellung ergibt sich eine Reihe von Use Cases, welche in Abbildung~\ref{fig:UseCaseDiagramm} dargestellt sind. Der einzige Stakeholder ist ein \textit{Beobachter}. \textit{Beobachter} sind Personen, die die Werte einer Person, zu der Sensorwerte vorliegen, beobachtet. Beispiele für Beobachter sind z.B. Pfleger oder Angehörige. In erste Linie möchte ein \textit{Beobachter}, das die zu der Beobachteten Person passenden Werte angezeigt werden(Use Case:\textit{Werte anzeigen}). Dazu ist es nötig, dass diese Person zuerst ausgewählt wird(Use Case:\textit{Person auswählen}). Um die Werte sinnvoll darzustellen, müssen vor allem kritische Werte gesondert dargestellt werden, da diese meist eine Bedrohung für Leib und Leben der beobachten Person darstellen. Zu diesem Zweck gibt es zum einen eine optische Rückmeldung(Use Case:\textit{optische Rückmeldung geben}) und zum anderen eine akustische(Use Case:\textit{akustische Rückmeldung geben}).\\
+Neben der zeitnahen Überwachung der Werte soll es ebenfalls möglich sein eine Zusammenstellung vergangener Werte zu erhalten(Use Case:\textit{Report anzeigen}). Auch dazu muss zuvor die gewünschte Person ausgewählt werden, aber zusätzlich auch ein Datumszeitraum(Use Case:\textit{Zeitraum wählen}).\\
+Werden die in diesen Use Cases definierten Grundanforderungen erfüllt, entsteht eine einfache Applikation zur Überwachung von Sensorwerten.
 
 \subsection{Technologien}
 \label{subsec:Technologien}

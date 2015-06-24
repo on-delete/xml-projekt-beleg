@@ -99,14 +99,62 @@ In der ersten Zeile wird das XML-Dokument, welches transformiert werden soll sow
 \\
 \\
 Da eXist aus einem NoSQL-DBMS besteht, werden alle Daten in Dokumenten abgespeichert. Dazu enthält die in diesem Projekt erstellte Datenbank für jede Person eine Collection (Siehe Abbildung \ref{collection1} auf S. \pageref{collection1}) mit der entsprechenden personId als Namen, um für die Reports gezielt nur die Dokumente zu durchsuchen, die notwendig sind. Innerhalb der Collections werden für jeden Tag separate XML-Dokumente (Siehe Abbildung \ref{collection2} auf S. \pageref{collection2}) erstellt, die alle Vitalwerte für die jeweilige Person enthalten.
-\subsection{Datengenerator}
+\subsection{Vitalwerte Datengenerator}
 Am Anfang war es wichtig, die vitale Werte d.H. Atemfrequenz, Herzfrequenz, Körpertemperatur und Blutdruck erzeugen lassen. Für die Darstellung kommt eine HTML Webseite mit Javascript und Jquery Technologien vor.
-\\
-\\
+
 Um diese Aufgabe zu erreichen, wurde erst einfacher Formular erstellt.
-Dieser besteht aus drei wichtigen Eingabefeldern, sprich Person ID, Room ID und Change room. Dazu gibt es noch ein Start und Stop Knopf für Ein-und Auschaltung des Generators. 
-Nachdem Einschalten werden die Werte für Atemfrequenz und Herzfrequenz jede 5 und für die Körpertemperatur und Blutdruck jede 10 Sekunden generiert. Die Werte werden inzwischen dem normalen Intervall erzeugt. Normaler Intervall enstspricht dem gesunden Menschen.
+Dieser besteht aus drei wichtigen Eingabefeldern, sprich Person ID, Room ID und Change room. Damit kann man eine fiktive Person mit einen Namen und einer Position darstellen. Um eine Bewegung zu simulieren, ist es später möglich das Zimmer zu ändern. Zusätzlich gibt es noch ein Start-und Stop Knopf für Ein-und Auschaltung des Generators.
+ 
+Nachdem Einschalten werden die Werte für Atemfrequenz und Herzfrequenz jede 5 und für die Körpertemperatur und Blutdruck jede 10 Sekunden generiert. Die Werte werden inzwischen dem normalen Intervall erzeugt. Normaler Intervall enstspricht dem gesunden Menschen. Um den besseren Verständnis über die ganze Situation zu bekommen, besteht den Nutzern eine Möglichkeit die generierten vital Werte live zu beobachten und auch steuern. Der Nutzer kann die Werte erhöhen oder vermindern.
+
+Sollten die Werte außerhalb des normalen Intervalles liegen, kommt es zur Warnung mit dem akustischen Signal. 
+Der zweiten Element der Webseite ist eine Tabelle, die die neu generierten Werte zeigt. Dort sieht man die neue Werte, jetzige Person ID, Room ID und auch entsprechenden Zeitstempel. Es gibt auch s.g. Normalspalte, wo man der normalen Intervall sehen und auch mit neuen Werten vergleichen kann.
 \\
+\begin{lstlisting}
+function generateBodyTemp() {
+//from 35.8 to 37.3 Celsius
+var x = parseFloat(Math.random() * 1.5 + 35.8).toFixed(2);
+document.getElementById("bodyTemp").innerHTML = x;
+
+var personId = document.getElementById("personid").value;
+var roomId = document.getElementById("pokojid").innerHTML;
+var time = displayTime();
+var date = getDate();
+var sensorType = "Koerpertemperatur"; 
+var string = xmlString(personId, roomId, time, date, sensorType, x);
+
+ajax(string);    
+}
+\end{lstlisting}
+
+Zum Erläuterung des Generatorhintegrundes wurde eine Funktion generateBodyTemp genommen, die die fiktive Körpertemperatur erzeugt. Die restlichen Vitalwerte Funktionen basieren auf das gleichem Prinzip. Unser Ziel ist die Herstellung von Nummer in dem Intervall von 35.8 bis 37.3. In der dritten Zeile geht es um die zufällige Erzeugung des Wertes. Mit der Methode getNumberFromInterval kann man mittels dieser Formula die zufälligen Nummer in dem beliebigen Intervall herstellen. 
+\begin{lstlisting}
+var getNumberFromInterval = Math.random() * (max - min) + min;
+\end{lstlisting}
+
+Dazu wurde die Methode Math.random benutzt, die die Nummer zwischen 0 und 1 liefert. Danach wird die Nummer mal 1.5 multipliziert und dazu noch 35.8 addiert. Mit dem parseFloat Methode nimmt man den String und liefert eine Fließkommazahl zurück.  Die Methode toFixed konvertiert die Nummer in den String mit 2 Stellen nach dem Dezimalkomma. Die neue Nummer wird in den Variable x gespeichert. In der vierten Zeile wird den neu generierten Wert in der HTML Tabelle mittels getElementById Methode gezeigt.
+
+In den Zeilen 6 und 7 werden die von dem User eingegebene Werte in den Variablen gespeichert. Die Zeilen Nr. 8 und 9 sind für die Herstellung des Zeitstempels zuständig. Dazu sind 2 Funktionen vorhanden und die Werte werden auch in den Variablen gespeichert. Die Zeile Nr. 10 beinhaltet den String Körpertemperatur. In den 11 Zeile wird den xmlString Funktion mit den 6 Parameter benutzt. Diese Methode erhaltet die Parameter und speichert die in die Variable string.
+
+In der letzten Zeile wird die Funktion ajax mit dem Parameter string aufgerufen.
 \\
-Um den besseren Verständnis über die ganze Situation zu bekommen, besteht den Nutzern eine Möglichkeit die generierten vital Werte live zu beobachten und auch steuern. Der Nutzer kann die Werte erhöhen oder vermindern. Abhängig von der Werten kann auch die Warnung mit dem akustischen Signal auftauchen. 
-Der zweiten Element der Webseite ist eine Tabelle, die die neu generierten Werte zeigt. Dort sieht man die generierten Werte, jetzige Person ID, Room ID und auch entsprechenden Zeitstempel. Es gibt auch s.g. OK Intervall Spalte, wo man der normalen Intervall sehen und auch mit neuen Werten vergleichen kann.
+\begin{lstlisting}
+function ajax(string){
+$.ajax({
+url: 'http://uakk45c08dae.aalxmlprojekt.koding.io:8888/postVitalwert', 
+processData: false,
+type: "POST",
+data: string,
+crossDomain: true,
+success: function(response){
+console.log("Success!");
+},
+error: function(jqXHR, textStatus, errorThrown) {
+console.log(errorThrown + ", " + jqXHR);
+}
+});
+}
+\end{lstlisting}
+
+Die oben gennante Funktion ajax dient zum Übertragung der Daten zum Server. In der dritten Zeile spezifiert man zu welcher Adresse sich die ajax verbindet. Unsere Variable string wird via POST Methode zu den URL gesendet. ProcessData ist auf false gesetzt, weil man den DOMDocument senden möchte. CrossDomain ist auf true gesetzt um die crossDomain Anforderungen verwenden zu können. Wenn die Daten erfolgreich zum Server gesendet werden, taucht die console mit dem Wert Success auf. Wenn aus irgendwelchem Grund die Übertragung nicht ausführen werden kann, liefert die FUnktion einen Error zurück.   
+     

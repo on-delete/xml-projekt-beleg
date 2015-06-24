@@ -1,12 +1,15 @@
 \section{Entwurf}
+\label{sec:Entwurf}
 Im folgenden Kapitel wird der Entwurf der Anwendung näher beschrieben. Neben den Use Cases und den verwendeten Technologien, wird auch ein Überblick über die System-Architektur gegeben sowie die Kommunikation innerhalb des Systems näher erläutert.
 
 \subsection{Use Cases}
-
+\label{subsec:UseCases}
 \subsection{Technologien}
+\label{subsec:Technologien}
 Die folgenden Technologien wurden im Projekt eingesetzt und sollen für das Verständnis näher erläutert werden.
 
 \subsubsection{Node.JS}
+\label{subsec:NodeJS}
 Node.JS \cite{nodejswebsite} bringt die Programmiersprache Javascript auf die Server-Ebene. Üblicherweise werden Sprachen wie PHP zur Erstellung von Webservices genutzt, um Anwendungen durch Anfragen eines Clients zu starten. Diese Architektur ist jedoch in solchen Fällen ungeeignet, in denen der Client in Echtzeit über Änderungen informiert werden soll. Node.JS ermöglicht es nun Webservices zu erstellen, die mittels Javascript von Anfragen der Clients unabhängig ausgeführt werden können. Hierzu wird die Anwendung beim Start an einen TCP-Port gebunden und erwartet die Anfragen vom Client. Im folgenden Codebeispiel ist gut zu erkennen, dass mit wenig Aufwand ein \textit{"Hello World"}-Server erstellt werden kann.
 
 \begin{lstlisting}
@@ -21,12 +24,14 @@ console.log('Server running at http://127.0.0.1:1337/');
 Außerdem kann nun aktiv mit dem Client über die geöffnete Verbindung kommuniziert werden. Zum Einsatz kommt dabei die Javascript Engine V8, welche auch im Google Chrome Browser eingesetzt wird. Die besonderen Eigenschaften von Node.JS liegen darin, schnelle und ressourcensparende Webservices zu ermöglichen, die außerdem viele gleichzeitige Anfragen von Clients bewältigen können \cite{cantelon:nodejs}. Dies wird zum einen durch die Auslagerung des I/O-Systems, also den Lese- und Schreiboperationen, in externe Prozesse realisiert. Dadurch werden Abläufe nicht durch die I/O-Operationen blockiert, sondern asynchron verarbeitet. Singlethreading ermöglicht außerdem das Vermeiden von parallelen Zugriffen auf bestimmte Ressourcen, so wie es bei Multithreading der Fall ist. Es müssen sich also keine Gedanken um eventuelle Thread-Safety-Implementierungen gemacht werden. Node.JS bietet ein reichhaltiges Angebot an Zusatzpaketen, die die bestehenden Funktionen erweitern. So ist es möglich z.B. REST-Services oder das Parsen von XML-Dokumenten leicht zu implementieren. Der im Node.JS enthaltene Package Manager (\textit{npm}) lädt alle nötigen Bibliotheken und stellt sie zur Verfügung.
 
 \subsubsection{eXist}
+\label{subsec:eXist}
 eXist \cite{existwebsite} ist eine in der Sprache Java entwickelte Anwendung, die in ihrer Ursprungsform als eine native XML Datenbank gedacht war \cite{siegel:exist}. Mittlerweile befindet sich das Projekt in der Version 2.2 und umfasst zahlreiche Funktionen, die es ermöglichen, XML-basierte Anwendungen zu erstellen sowie Dokumente in einer NoSQL-Datenbank abzuspeichern und zu verwalten. Die Abfragesprache XQuery\footnote[1]{XML Query Language} ermöglicht das Zugreifen auf die gespeicherten Dokumente. Es können jedoch nicht nur XML-Dokumente in der Datenbank abgelegt werden, sondern nahezu jedes Dateiformat ist erlaubt. So lassen sich eben auch Anwendungen erstellen, die andere Technologien verwenden.
 \\
 \\
 In der stetigen Entwicklung von eXist kam auch eine grafische Oberfläche hinzu, mit der z.B. Code direkt über eine integrierte IDE erstellt und verändert werden kann. Eine Erweiterung des Funktionsumfangs ist durch den Paketmanager leicht möglich. eXist befindet sich weiterhin in der Entwicklung und manche Funktionen sind noch nicht fertig implementiert oder haben noch Fehler. Es ist jedoch in dem jetzigen Stand sehr gut nutzbar.
 
 \subsection{Systemarchitketur}
+\label{subsec:Systemarchitketur}
 Bei der Systemarchitektur fiel die Wahl auf eine Client-Server Anwendung. Aufgrund der Anforderung, ein Monitoring-System zu erstellen, sprich das der Nutzer über eine grafische Schnittstelle bestimmte Werte angezeigt bekommen lassen möchte, musste ein Client erstellt werden. Weiterhin war gefordert, dass Sensoren von verschiedenen Haushalten aus Daten an das Monitoring-System schicken und diese auch gespeichert werden. Daher musste es eine Möglichkeit geben, die Daten von verschiedenen Quellen in einer zentralen Einheit verwalten zu können. Hierfür wurde ein Server mit integrierter Datenbank ausgewählt. Der erste Entwurf für die Systemarchitektur sah wie folgt aus:
 
 \begin{figure}[h]
@@ -51,6 +56,7 @@ Daher wurde entschieden, die Kommunikation mittels Websockets zu realisieren. De
 Der Node.JS-Server ist die zentrale Einheit und steuert die Kommunikation zwischen den Sensoren und den Clients. Weiterhin speichert er alle empfangenen Werte in der eXist-Datenbank ab. Hauptsächlich besteht die Aufgabe des Node.JS-Servers darin, die Anfragen und Antworten an die entsprechenden Stellen (eXist, Client) weiterzuleiten. Dies war jedoch nötig, um sowohl REST-Services, als auch Websockets verwenden zu können.
 
 \subsection{Kommunikation}
+\label{subsec:Kommunikation}
 Die Sensoren schicken ihre ermittelten Werte (\textit{sensorData}) an den Node.JS -Server. Dabei wird die Antwort von den Sensoren jedoch ignoriert, da auf dieser Seite keine  Fehlerbearbeitung vorgesehen ist. Die Daten werden über eine REST-Anfrage (POST) mit dem entsprechenden XML-Dokument gesendet.
 
 \begin{figure}[h]

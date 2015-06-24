@@ -1,7 +1,9 @@
 \section{Implementierung}
+\label{sec:Implementierung}
 Das folgende Kapitel beschreibt beispielhaft die Umsetzung des im vorigen Abschnitt beschriebenen Entwurfs. Dabei wird auf einzelne Programmabschnitte näher eingegangen.
 
 \subsection{Node.JS-Server}
+\label{subsec:NodeJSServer}
 Der Node.JS-Server besteht aus zwei Instanzen. Eine Instanz ist als ein REST-Service implementiert. Sie stellt eine POST-Ressource zur Verfügung, über die die Daten der Sensoren an das eXist geschickt werden. Hierfür gibt es eine \textit{route}-Funktion, die ein Request entgegennimmt und prüft, welche URL angesprochen wird. 
 
 \begin{lstlisting}
@@ -51,6 +53,7 @@ receiver.emit("receiveVitalWert", xml);
 Die beiden Instanzen wurden jeweils an zwei verschiedene Ports gebunden, um z.B. zu vermeiden, dass ein Websocket-Event an den Router des REST-Services geschickt wird. Deshalb wurde für den REST-Service der Port 8888 und für den Websocket-Service der Port 8887 festgelegt.
 
 \subsection{eXist-Server}
+\label{subsec:eXistServer}
 Um eXist von außerhalb ansprechen zu können, wurde der in eXist implementierte Standard \textit{RESTXQ} verwendet. Dieser ermöglicht mittels Annotationen das Bereitstellen von \textit{resource functions}, also Ressourcen, die über HTTP verfügbar sind. Es können XQuery-Funktionen über solche HTTP-Anfragen ausgeführt und die Ergebnisse zurückgegeben werden. POST-Methoden werden beispielsweise mit der Annotation \textit{\%rest:POST("\{\$body\}")} deklariert. Mit dem \textit{\$body} Element kann außerdem festgelegt werden, dass mit dem POST Daten gesendet werden sollen.
 
 \begin{lstlisting}

@@ -4,6 +4,8 @@ Im folgenden Kapitel wird der Entwurf der Anwendung näher beschrieben. Neben de
 
 \subsection{Use Cases}
 \label{subsec:UseCases}
+Aus der Aufgabenstellung ergibt sich eine Reihe von Use Cases, welche in Abbildung~\ref{fig:UseCaseDiagramm} dargestellt sind. 
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.7]{images/AAL-Use-Case-Diagramm.jpg} 
@@ -12,9 +14,10 @@ Im folgenden Kapitel wird der Entwurf der Anwendung näher beschrieben. Neben de
 \end{center}
 \end{figure}
 
-Aus der Aufgabenstellung ergibt sich eine Reihe von Use Cases, welche in Abbildung~\ref{fig:UseCaseDiagramm} dargestellt sind. Der einzige Stakeholder ist ein \textit{Beobachter}. \textit{Beobachter} sind Personen, die die Werte einer Person, zu der Sensorwerte vorliegen, beobachtet. Beispiele für Beobachter sind z.B. Pfleger oder Angehörige. In erste Linie möchte ein \textit{Beobachter}, das die zu der Beobachteten Person passenden Werte angezeigt werden(Use Case:\textit{Werte anzeigen}). Dazu ist es nötig, dass diese Person zuerst ausgewählt wird(Use Case:\textit{Person auswählen}). Um die Werte sinnvoll darzustellen, müssen vor allem kritische Werte gesondert dargestellt werden, da diese meist eine Bedrohung für Leib und Leben der beobachten Person darstellen. Zu diesem Zweck gibt es zum einen eine optische Rückmeldung(Use Case:\textit{optische Rückmeldung geben}) und zum anderen eine akustische(Use Case:\textit{akustische Rückmeldung geben}).\\
-Neben der zeitnahen Überwachung der Werte soll es ebenfalls möglich sein eine Zusammenstellung vergangener Werte zu erhalten(Use Case:\textit{Report anzeigen}). Auch dazu muss zuvor die gewünschte Person ausgewählt werden, aber zusätzlich auch ein Datumszeitraum(Use Case:\textit{Zeitraum wählen}).\\
-Werden die in diesen Use Cases definierten Grundanforderungen erfüllt, entsteht eine einfache Applikation zur Überwachung von Sensorwerten.
+Der einzige Stakeholder ist ein \textit{Beobachter}. \textit{Beobachter} sind Personen, die die Werte einer Person, zu der Sensorwerte vorliegen, beobachtet. Beispiele für Beobachter sind z.B. Pfleger oder Angehörige. In erste Linie möchte ein \textit{Beobachter}, dass die zu der beobachteten Person passenden Werte angezeigt werden(Use Case:\textit{Werte anzeigen}). Dazu ist es nötig, dass diese Person zuerst ausgewählt wird(Use Case:\textit{Person auswählen}). Um die Werte sinnvoll darzustellen, müssen vor allem kritische Werte gesondert dargestellt werden, da diese meist eine Bedrohung für Leib und Leben der beobachteten Person darstellen. Zu diesem Zweck gibt es zum einen eine optische Rückmeldung(Use Case:\textit{optische Rückmeldung geben}) und zum anderen eine akustische(Use Case:\textit{akustische Rückmeldung geben}).
+\\
+\\
+Neben der zeitnahen Überwachung der Werte soll es ebenfalls möglich sein, eine Zusammenstellung vergangener Werte zu erhalten(Use Case:\textit{Report anzeigen}). Auch dazu muss zuvor die gewünschte Person ausgewählt werden, aber zusätzlich auch ein Datumszeitraum(Use Case:\textit{Zeitraum wählen}). Werden die in diesen Use Cases definierten Grundanforderungen erfüllt, entsteht eine einfache Applikation zur Überwachung von Sensorwerten.
 
 
 \subsection{Technologien}
@@ -49,11 +52,12 @@ Bei der Systemarchitektur fiel die Wahl auf eine Client-Server Anwendung. Aufgru
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.6]{images/sa1.jpg} 
+\includegraphics[scale=0.55]{images/sa1.jpg} 
 \caption{Erster Entwurf Systemarchitektur}
 \end{center}
 \end{figure}
 
+\newpage
 Ein eXist-Server stellt dabei die zentrale Komponente dar, die sowohl alle Daten von den Sensoren entgegennimmt und verwaltet, sowie auch für die Kommunikation zwischen dem Server und den Clients verantwortlich ist. Für die Sensoren stellt der Server einen REST-Service zur Verfügung, welcher als Übertragungsschnittstelle der ermittelten Vitalwerte dient. So ist es auch leicht möglich, weitere Sensoren an das System anzuschließen, da lediglich die Adresse des REST-Services bekannt sein muss und in welcher Form die Daten übertragen werden müssen. Ansonsten gibt es keine direkte Kopplung. Für die Kommunikation zwischen Server und Clients hätte ebenfalls ein REST-Service verwendet werden können. Hierbei hätte sich jedoch das Problem ergeben, dass sich die Daten von den Sensoren in sehr kurzen Zeitabständen ändern. Um jedoch immer die aktuellsten Vitalwerte anzeigen zu können, müsste der Client sehr oft den Server nach neuen Daten abfragen. Bei mehreren Clients könnte dies zu einer Serverüberlastung führen, da der Server nicht mehr alle Anfragen in kurzer Zeit beantworten kann.
 \\
 \\
@@ -61,7 +65,7 @@ Daher wurde entschieden, die Kommunikation mittels Websockets zu realisieren. De
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.6]{images/sa2.jpg} 
+\includegraphics[scale=0.55]{images/sa2.jpg} 
 \caption{Zweiter Entwurf Systemarchitektur}
 \end{center}
 \end{figure}
@@ -72,13 +76,14 @@ Der Node.JS-Server ist die zentrale Einheit und steuert die Kommunikation zwisch
 \label{subsec:Kommunikation}
 Die Sensoren schicken ihre ermittelten Werte (\textit{sensorData}) an den Node.JS -Server. Dabei wird die Antwort von den Sensoren jedoch ignoriert, da auf dieser Seite keine  Fehlerbearbeitung vorgesehen ist. Die Daten werden über eine REST-Anfrage (POST) mit dem entsprechenden XML-Dokument gesendet.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.6]{images/komm1.jpg} 
 \caption{Kommunikation zwischen Sensoren und Node.JS-Server}
 \end{center}
 \end{figure}
 
+\newpage
 Der eXist-Server bietet zur Kommunikation einen Standard, mit dem sich mittels XQuery REST-Services erstellen lassen. \textit{RESTXQ} bietet verschiedene Annotationen, um beispielsweise einen URL-Pfad anzugeben, unter dem eine Funktion von außerhalb angesprochen werden kann, oder um die Funktion als eine POST-Methode festzulegen. Mit Hilfe der Annotationen wurde nun die Kommunikation zwischen dem Node.JS-Server und der eXist-Datenbank hergestellt. Die von den Sensoren empfangenen Daten werden mittels POST an die Datenbank geschickt (\textit{sensorData}). Weiterhin kann mittels einem \textit{reportRequest} ein Report für eine bestimmte Person in einem Zeitraum über alle Vitalwerte angefordert werden. Der eXist sendet daraufhin die erstellte PDF-Datei als \textit{reportData} wieder zum Node.JS-Server. Außerdem kann geprüft werden, ob eine \textit{personId} in der Datenbank bereits verzeichnet ist. Dafür sendet der Node.JS-Server eine Anfrage mit der \textit{personId} an eXist und erhält eine Meldung über die Existenz der ID (\textit{personIdResponse}).
 
 \begin{figure}[h]
@@ -97,8 +102,8 @@ Von den Clients aus können sowohl die Reports, als auch die Überprüfung der g
 \end{center}
 \end{figure}
 
-Zur Übermittlung der Daten von den Sensoren zum Server wurde eine XML-Struktur verwendet, welche in Abbildung~\ref{lst:sensorXml} zu sehen ist.
-Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zugeordnet wird. Die \texttt{roomId} symbolisiert den Aufenthaltsort der Person, wobei der Wert auch eine Abstrakte Id sein kann und keine physische Lokalität. Der \texttt{timestamp} beinhaltet die Uhrzeit und das Datum der Erfassung des Datensatzes. Das gewählte Format richtet sich dabei nach der Speicherung im eXist um die Verarbeitung dort zu erleichtern. Der \texttt{sensor} Tag beinhaltet den Typ (\texttt{type}) des Sensors und seinen Wert(\texttt{value}). Durch die separate Angabe des Typs als Textwert in der XML ist es leicht möglich diese XML-Struktur für weitere Sensortypen zu verwenden. Ebenso kann der Wert sehr allgemein geschickt werden, z.B. auch als String mit physikalischer Einheit. Der \texttt{status} kann genutzt werden um direkt zu übermitteln, ob ein Wert in einem kritischen Bereich liegt. Dadurch ist es nicht nötig, dass der Empfänger Kenntnis von den Grenzwerten hat.
+\newpage
+Zur Übermittlung der Daten von den Sensoren zum Server wurde eine XML-Struktur verwendet, welche in Abbildung~\ref{lst:sensorXml} zu sehen ist. Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zugeordnet wird. Die \texttt{roomId} symbolisiert den Aufenthaltsort der Person, wobei der Wert auch eine Abstrakte Id sein kann und keine physische Lokalität. Der \texttt{timestamp} beinhaltet die Uhrzeit und das Datum der Erfassung des Datensatzes. Das gewählte Format richtet sich dabei nach der Speicherung im eXist, um die Verarbeitung zu erleichtern. Der \texttt{sensor} Tag beinhaltet den Typ (\texttt{type}) des Sensors und seinen Wert(\texttt{value}). Durch die separate Angabe des Typs als Textwert in der XML ist es leicht möglich, diese XML-Struktur für weitere Sensortypen zu verwenden. Ebenso kann der Wert sehr allgemein geschickt werden, z.B. auch als String mit physikalischer Einheit. Der \texttt{status} kann genutzt werden um direkt zu übermitteln, ob ein Wert in einem kritischen Bereich liegt. Dadurch ist es nicht nötig, dass der Empfänger Kenntnis von den Grenzwerten hat.
 
 \begin{lstlisting}[caption={SensorXML},label=lst:sensorXml]
 <sensorData>
@@ -111,6 +116,7 @@ Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zuge
    <sensor>
       <type>Herzschlag</type>
       <value>120</value>
+      <status>normal</status>
    </sensor>
 </sensorData>
 \end{lstlisting}

@@ -13,3 +13,22 @@ Weiterhin gab es bei der Implementierung der Queries mittels XQuery diverse Prob
 
 \subsection{Ausblick}
 \label{subsec:Ausblick}
+Das Ergebnis dieser Arbeit ist eine funktionierende Applikation, aber es gibt eine Reihe von Möglichkeiten, diese zu erweitern. Einige davon sollen hier aufgeführt werden.
+
+\begin{itemize}
+	\item \textbf{weitere Reportmöglichkeiten:} \\
+	Die vorhandene Darstellung von Reporten ist sehr einfach und nicht anpassbar. Es könnten Optionen zur individuellen Formatierung oder selektiven Darstellung von Werten eingefügt werden um die Filterung von interessanten Werten zu vereinfachen.
+	\item \textbf{grafische Darstellung vergangener Werte:} \\
+	Zurzeit werden nur die jeweils aktuellen Werte als Text angezeigt. Optisch ansprechender und informativer wäre z.B. eine Darstellung der Werte in Diagrammen. In Kombination mit den erweiterten Reportmöglichkeiten könnten diese Diagramme auch in die Reports übernommen werden. Ein Auswahl der Diagrammart wäre ebenfalls sinnvoll.
+	\item \textbf{Reaktionen auf besondere Ereignisse:} \\
+	Da bei den hier beobachteten kritischen Vitalwerte eine schnelle Reaktionszeit oft ein wichtiger Faktor ist, wäre das Hinzufügen von automatischen Aktionen bei gewissen Ereignissen, z.B. kritischen Werten, sehr praktisch. Die Art dieser Aktionen kann dabei z.B. die Anpassung von Gerätefunktionen oder das schlichte Senden eine Email sein.
+	\item \textbf{Echtzeittest:} \\
+	Da die im vorherigen Punkt beschrieben Reaktionszeit sehr wichtig ist, muss sie auch getestet werden. Dies war im Rahmen dieser Arbeit jedoch nicht möglich. 
+	\item \textbf{dynamische Anpassung an weitere Sensoren:} \\
+	Die offene Gestaltung der XML zur Übertragung der Werte erlaubt das Hinzufügen von weiteren Sensortypen. Diese müssen jedoch auch dargestellt werden, was zurzeit nicht möglich ist, deswegen wäre eine dynamische Anpassung der GUI an weitere Sensoren nötig. 
+	\item \textbf{Auswahl bestimmter Sensoren:} \\
+	Vor allem im Zusammenhang mit dem vorigen Punkt kann es nützlich werden, wenn man nur bestimmte Sensorwerte angezeigt bekommen möchte.
+	\item \textbf{Sicherheit:} \\
+	Vitalwerte sind personenbezogene Daten und müssen geschützt werden. Dazu sollte es eine Funktion zur Benutzersteuerung geben. Ebenso könte die Verbindung an sich gesichert werden.
+\end{itemize}
+

@@ -16,6 +16,7 @@ Aus der Aufgabenstellung ergibt sich eine Reihe von Use Cases, welche in Abbildu
 Neben der zeitnahen Überwachung der Werte soll es ebenfalls möglich sein eine Zusammenstellung vergangener Werte zu erhalten(Use Case:\textit{Report anzeigen}). Auch dazu muss zuvor die gewünschte Person ausgewählt werden, aber zusätzlich auch ein Datumszeitraum(Use Case:\textit{Zeitraum wählen}).\\
 Werden die in diesen Use Cases definierten Grundanforderungen erfüllt, entsteht eine einfache Applikation zur Überwachung von Sensorwerten.
 
+
 \subsection{Technologien}
 \label{subsec:Technologien}
 Die folgenden Technologien wurden im Projekt eingesetzt und sollen für das Verständnis näher erläutert werden.
@@ -48,7 +49,7 @@ Bei der Systemarchitektur fiel die Wahl auf eine Client-Server Anwendung. Aufgru
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.7]{images/sa1.jpg} 
+\includegraphics[scale=0.6]{images/sa1.jpg} 
 \caption{Erster Entwurf Systemarchitektur}
 \end{center}
 \end{figure}
@@ -60,7 +61,7 @@ Daher wurde entschieden, die Kommunikation mittels Websockets zu realisieren. De
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.7]{images/sa2.jpg} 
+\includegraphics[scale=0.6]{images/sa2.jpg} 
 \caption{Zweiter Entwurf Systemarchitektur}
 \end{center}
 \end{figure}
@@ -73,7 +74,7 @@ Die Sensoren schicken ihre ermittelten Werte (\textit{sensorData}) an den Node.J
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.8]{images/komm1.jpg} 
+\includegraphics[scale=0.6]{images/komm1.jpg} 
 \caption{Kommunikation zwischen Sensoren und Node.JS-Server}
 \end{center}
 \end{figure}
@@ -82,7 +83,7 @@ Der eXist-Server bietet zur Kommunikation einen Standard, mit dem sich mittels X
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.8]{images/komm2.jpg} 
+\includegraphics[scale=0.6]{images/komm2.jpg} 
 \caption{Kommunikation zwischen Node.JS-Server und eXist}
 \end{center}
 \end{figure}
@@ -91,16 +92,13 @@ Von den Clients aus können sowohl die Reports, als auch die Überprüfung der g
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.8]{images/komm3.jpg} 
+\includegraphics[scale=0.6]{images/komm3.jpg} 
 \caption{Kommunikation zwischen Node.JS-Server und Client}
 \end{center}
 \end{figure}
 
-
-
 Zur Übermittlung der Daten von den Sensoren zum Server wurde eine XML-Struktur verwendet, welche in Abbildung~\ref{lst:sensorXml} zu sehen ist.
 Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zugeordnet wird. Die \texttt{roomId} symbolisiert den Aufenthaltsort der Person, wobei der Wert auch eine Abstrakte Id sein kann und keine physische Lokalität. Der \texttt{timestamp} beinhaltet die Uhrzeit und das Datum der Erfassung des Datensatzes. Das gewählte Format richtet sich dabei nach der Speicherung im eXist um die Verarbeitung dort zu erleichtern. Der \texttt{sensor} Tag beinhaltet den Typ (\texttt{type}) des Sensors und seinen Wert(\texttt{value}). Durch die separate Angabe des Typs als Textwert in der XML ist es leicht möglich diese XML-Struktur für weitere Sensortypen zu verwenden. Ebenso kann der Wert sehr allgemein geschickt werden, z.B. auch als String mit physikalischer Einheit. Der \texttt{status} kann genutzt werden um direkt zu übermitteln, ob ein Wert in einem kritischen Bereich liegt. Dadurch ist es nicht nötig, dass der Empfänger Kenntnis von den Grenzwerten hat.
-
 
 \begin{lstlisting}[caption={SensorXML},label=lst:sensorXml]
 <sensorData>
@@ -113,7 +111,6 @@ Die \texttt{personId} identifiziert die Person, der der gesendete Datensatz zuge
    <sensor>
       <type>Herzschlag</type>
       <value>120</value>
-      <status>normal</status>
    </sensor>
 </sensorData>
 \end{lstlisting}

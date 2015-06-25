@@ -48,8 +48,8 @@ In der stetigen Entwicklung von eXist kam auch eine grafische Oberfläche hinzu,
 
 \subsubsection{XSLT}
 \label{subsec:XSLT}
-XSL ist die Abkürzung für EXtensible Stylesheet Language und gleichzeitig auch eine Stylesheet-Sprache für XML-Dokumente. Auf der anderen Seite steht XSLT \cite{xsltwebsite} für XSL Transformations. XSLT wird verwendet um einen XML Dokument in einem anderen XML Dokument oder auch z.B. HTML, PDF oder RTF Dokument umzuwandeln.
-Mit XSLT lassen sich die Elemente und Attribute hinzufügen oder löschen von dem Ausgabedatei. Es besteht auch die Möglichkeit die Elemente zu sortieren oder umordnen. Man kann überlegen, welche Elemente sollen versteckt oder angeschaut werden.
+XSL ist die Abkürzung für EXtensible Stylesheet Language und gleichzeitig auch eine Stylesheet-Sprache für XML-Dokumente. Auf der anderen Seite steht XSLT \cite{xsltwebsite} für XSL Transformations. XSLT wird verwendet um einen XML Dokument in einem anderen XML Dokument oder auch z.B. HTML, PDF oder RTF Dokument umzuwandeln. Mit XSLT lassen sich die Elemente und Attribute hinzufügen oder löschen von dem Ausgabedatei. Es besteht auch die Möglichkeit die Elemente zu sortieren oder umordnen. Man kann überlegen, welche Elemente sollen versteckt oder angeschaut werden.
+\\
 \\
 Um die korrekte XSL Deklaration zu erreichen, muss zuerst der Root Element definiert werden:  
 \begin{lstlisting}
@@ -57,9 +57,7 @@ Um die korrekte XSL Deklaration zu erreichen, muss zuerst der Root Element defin
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 \end{lstlisting}
 Als Beispiel wird XML Datei genommen z.B.
-\\
-\\
-\\
+
 \begin{lstlisting}
 <message>
 <to>Zuzana</to>
@@ -100,17 +98,18 @@ Als Nächstes wird in die XML Datei s.g. XSL style sheet reference hinzugefügt.
 		\caption{XSLT Datei}
 		\label{fig:XSLTDatei}
 	\end{center}
-\end{figure}       
+\end{figure}
+    
 \subsubsection{Websockets}
 \label{subsec:Websockets}
-Websockets \cite{websocketsweb} dienen zum Kommunikation zwischen 2 Prozessen mittels IP Technologie. Ein Socket umfasst 2 IP Adressen, ein Protokoll und ein für die Kommunikation benutzter Port. Komplexere Dienste nutzen diesen Socket für die bidirektionale Datenübertragung.
-
-Websockets ist eine Dienst in der Welt von Webapplikationen. Es lässt sich eine Applikation schreiben, wo ist der Client in der Lage sich mit dem Server zu verbinden. Nach dieser Verbindung besteht eine Möglichkeit die Informationen in einer Echtzeit auszutauschen. Mittels dieser Technologie kommt es zum einfachen Erstellung von Webapplikationen wie Online-chat usw.
+Websockets \cite{websocketsweb} dienen zum Kommunikation zwischen 2 Prozessen mittels IP Technologie. Ein Socket umfasst 2 IP Adressen, ein Protokoll und ein für die Kommunikation benutzter Port. Komplexere Dienste nutzen diesen Socket für die bidirektionale Datenübertragung. Websockets ist eine Dienst in der Welt von Webapplikationen. Es lässt sich eine Applikation schreiben, wo ist der Client in der Lage sich mit dem Server zu verbinden. Nach dieser Verbindung besteht eine Möglichkeit die Informationen in einer Echtzeit auszutauschen. Mittels dieser Technologie kommt es zum einfachen Erstellung von Webapplikationen wie Online-chat usw.
+\\
 \\
 An der Seite des Clients kann in Javascript folgende Instanz der Klasse und damit auch die Verbindung zum Server erstellt werden.  
 \begin{lstlisting}
 var myWebSocket = new WebSocket("ws://www.server.de/dienst");
 \end{lstlisting}
+
 Websockets bietet drei verschiedene Ereignisse:
 \begin{itemize}
 	\item \textbf{onopen} \\
